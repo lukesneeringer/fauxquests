@@ -1,0 +1,11 @@
+Primary author:
+
+  * Luke Sneeringer <luke@sneeringer.com>
+
+
+This package contains some code taken from `requests_testadapter`, written
+by Łukasz Langa (in particular, see fauxquests/response.py).
+
+In addition to this code, Łukasz's work was instrumental in providing the
+understanding needed to make fauxquests, and I am indebted to his efforts,
+without which it is likely that fauxquests would not exist.

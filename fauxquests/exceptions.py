@@ -1,0 +1,2 @@
+class UnregisteredURL(AssertionError):
+    pass

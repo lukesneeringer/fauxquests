@@ -1,0 +1,15 @@
+# ----------------------
+# -- Package Metadata --
+# ----------------------
+include AUTHORS
+include LICENSE
+include VERSION
+include fauxquests/VERSION
+include requirements.txt
+
+# -------------------
+# -- Documentation --
+# -------------------
+# This package is small enough that a `README.md` at the repository
+# root should suffice just fine.
+# recursive-include docs *

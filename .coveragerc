@@ -1,0 +1,7 @@
+[run]
+source = fauxquests/
+branch = True
+timid = True
+
+[html]
+directory = .coverage-html/
