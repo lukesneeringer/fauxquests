@@ -26,6 +26,7 @@ class FauxAdapter(HTTPAdapter):
         super(FauxAdapter, self).__init__()
         self._registry = Registry()
         self._url_pattern = url_pattern
+        self.requests = []
 
     def clear(self):
         self._registry.clear()
@@ -89,6 +90,10 @@ class FauxAdapter(HTTPAdapter):
         # he has a good reason.
         if not stream:
             r.content
+
+        # Track information about this call, so that asserts can be made
+        # against what was done on this object.
+        self.requests.append(request)
 
         # Return the response object
         return r
