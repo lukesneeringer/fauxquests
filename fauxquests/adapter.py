@@ -31,7 +31,8 @@ class FauxAdapter(HTTPAdapter):
     def clear(self):
         self._registry.clear()
 
-    def register(self, url, response, status_code=200, headers=None, **kwargs):
+    def register(self, url, response, status_code=200, method='GET',
+                                      headers=None, **kwargs):
         """Add the given URL to the registry, and assign the response
         to it.
 
@@ -45,7 +46,7 @@ class FauxAdapter(HTTPAdapter):
         url = self._url_pattern % url
 
         # Create a URL object from the URL and keyword arguments.
-        url = URL(url, **kwargs)
+        url = URL(url, method=method.upper(), **kwargs)
 
         # If the response is a string object, convert it to a bytes object.
         if isinstance(response, six.text_type):
@@ -56,7 +57,7 @@ class FauxAdapter(HTTPAdapter):
         self._registry[url] = Resp(response, status_code, headers)
 
     def register_json(self, url, response, status_code=200,
-                      headers=None, **kwargs):
+                            method='GET', headers=None, **kwargs):
         """Dump the response to JSON, add the appropriate headers to match,
         and register the URL as normal.
         """
@@ -69,7 +70,7 @@ class FauxAdapter(HTTPAdapter):
 
         # Perform the registration.
         return self.register(url, response, status_code=status_code,
-                             headers=headers, **kwargs)
+                             method=method.upper(), headers=headers, **kwargs)
 
     def send(self, request, stream=False, **kwargs):
         """Return the appropriate pre-registered response when a request
@@ -78,7 +79,7 @@ class FauxAdapter(HTTPAdapter):
         If the URL is not matched, the registry raises UnregisteredURL.
         """
         # Get the pre-registered response from our registry.
-        url = URL(request.url)
+        url = URL(request.url, method=request.method)
         response = copy(self._registry[url])
 
         # Use requests to build the response object.

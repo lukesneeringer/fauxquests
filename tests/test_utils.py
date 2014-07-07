@@ -66,9 +66,22 @@ class URLTests(unittest.TestCase):
         url2 = URL('http://foo/?bar=baz&bar=eggs&spam=eggs')
         self.assertEqual(url, url2)
 
+    def test_equality_str(self):
+        """Establish that a URL object can be compared against another
+        string object with expected results.
+        """
+        url = URL('http://foo/?bar=baz&bar=eggs&spam=eggs')
+        url2 = 'http://foo/?bar=baz&bar=eggs&spam=eggs'
+        self.assertEqual(url, url2)
+
     def test_inequality(self):
         url = URL('http://foo/?bar=baz&bar=eggs&spam=eggs')
         url2 = URL('http://foo/?eggs=bacon')
+        self.assertNotEqual(url, url2)
+
+    def test_method_inequality(self):
+        url = URL('http://foo/?bar=baz', method='GET')
+        url2 = URL('http://foo/?bar=baz', method='POST')
         self.assertNotEqual(url, url2)
 
     def test_uncomparable(self):
@@ -81,7 +94,7 @@ class URLTests(unittest.TestCase):
         url = URL('http://foo/?bar=eggs&bar=baz&spam=eggs')
         self.assertEqual(
             six.text_type(url),
-            'http://foo/?bar=baz&bar=eggs&spam=eggs'
+            'GET http://foo/?bar=baz&bar=eggs&spam=eggs'
         )
 
     def test_superset_uncomparable(self):

@@ -54,7 +54,7 @@ class URL(object):
     """A class for holding a URL, with convenience methods
     for poking at its query string separately from the main URI.
     """
-    def __init__(self, url, **kwargs):
+    def __init__(self, url, method='GET', **kwargs):
         # Does the URL string have a query string in it?
         # If so, parse that out into keyword arguments.
         if '?' in url:
@@ -68,6 +68,7 @@ class URL(object):
             url = url[:url.index('?')]
 
         # Store the base URL and the keyword arguments.
+        self.method = method.upper()
         self.uri = url
         self.qs = AlphaSortedDict(kwargs)
 
@@ -82,7 +83,9 @@ class URL(object):
                             other.__class__.__name__)
 
         # Return whether the URI and QS are the same.
-        return self.uri == other.uri and self.qs == other.qs
+        return all([self.uri == other.uri,
+                    self.qs == other.qs,
+                    self.method == other.method])
 
     def __hash__(self):
         return hash(str(self))
@@ -91,7 +94,7 @@ class URL(object):
         """Return the full URL, as a string."""
 
         # Start with the basic URI.
-        answer = self.uri
+        answer = '%s %s' % (self.method, self.uri)
 
         # Append any keyword arguments to the query-string
         if self.qs:
@@ -136,6 +139,10 @@ class URL(object):
 
         # If the URIs do not exactly match, this is not an exact superset.
         if self.uri != other.uri:
+            return False
+
+        # If the methods do not match, this is not an exact superset.
+        if self.method.upper() != other.method.upper():
             return False
 
         # Ensure that every key in `other.qs` exists in `self.qs` with

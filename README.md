@@ -89,6 +89,31 @@ with faux_server as fs:
     r.json()   # { 'spam': True }
 ```
 
+#### Request Methods
+
+_New in fauxquests 1.1._
+
+In fauxquests 1.0, the request method (GET, POST, etc.) is ignored. This is
+changed in fauxquests 1.1. Registrations are assumed to be applicable to
+GET requests only unless another method is specified.
+
+If you are mocking a request with another method, such as POST, PUT, or
+PATCH, use a `method` keyword argument to the registration method:
+
+```python
+import fauxquests
+import requests
+
+faux_server = fauxquests.FauxServer()
+with faux_server as fs:
+    fs.register_json('http://foo/', {'spam': True}, method='POST')
+
+    r = requests.post('http://foo/')
+    r.json()   # { 'spam': True }
+
+    r = requests.get('http://foo/')  # UnregisteredURL
+```
+
 #### Query Strings in URLs
 
 fauxquests has special handling for query-strings in URLs, in two ways.

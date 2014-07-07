@@ -36,6 +36,7 @@ class AdapterTests(unittest.TestCase):
             fa.register_json('foo', { 'bar': 'baz' })
             m.assert_called_once_with('foo', '{"bar": "baz"}',
                 headers={ 'Content-Type': 'application/json' },
+                method='GET',
                 status_code=200,
             )
 
@@ -46,6 +47,7 @@ class AdapterTests(unittest.TestCase):
         fa = FauxAdapter()
         fa.register_json('foo', { 'bar': 'baz' })
         request = mock.MagicMock()
+        request.method = 'GET'
         request.url = 'foo'
         response = fa.send(request)
         self.assertEqual(response.json(), { 'bar': 'baz' })

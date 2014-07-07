@@ -41,7 +41,8 @@ class FauxServer(Session):
     def __exit__(self, type, value, traceback):
         return self.stop()
 
-    def register(self, url, response, status_code=200, headers=None, **kwargs):
+    def register(self, url, response, status_code=200, method='GET',
+                                      headers=None, **kwargs):
         """Register a given URL and response with this FauxServer.
 
         Internally, this object's context manager creates and returns a
@@ -52,10 +53,10 @@ class FauxServer(Session):
         and applies universally to all adapters this object creates.
         """
         self.registrations[url] = Registration('', response, status_code,
-                                              headers, kwargs)
+                                              method, headers, kwargs)
 
     def register_json(self, url, response, status_code=200,
-                      headers=None, **kwargs):
+                            method='GET', headers=None, **kwargs):
         """Register a given URL and response with this FauxServer.
 
         Internally, this object's context manager creates and returns a
@@ -66,7 +67,7 @@ class FauxServer(Session):
         and applies universally to all adapters this object creates.
         """
         self.registrations[url] = Registration('json', response, status_code,
-                                               headers, kwargs)
+                                               method, headers, kwargs)
 
     def start(self):
         """Institute the patching process, meaining requests sent to
@@ -88,7 +89,7 @@ class FauxServer(Session):
 
             # Forward the registration to the adapter.
             getattr(adapter, method_name)(url, reg.response, reg.status_code,
-                                          reg.headers, **reg.kwargs)
+                                          reg.method, reg.headers, **reg.kwargs)
 
         # Start the patcher.
         self.patcher.start()
@@ -106,4 +107,4 @@ class FauxServer(Session):
 
 
 Registration = namedtuple('Registration', ['type', 'response', 'status_code',
-                                           'headers', 'kwargs'])
+                                           'method', 'headers', 'kwargs'])
