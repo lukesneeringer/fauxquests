@@ -1,12 +1,13 @@
 ---
 language: python
 python:
-    - 3.3
-    - 2.7
+  - 3.4
+  - 3.3
+  - 2.7
 install:
-    - pip install --use-mirrors coveralls coverage mock
-    - pip install --use-mirrors -r requirements.txt
+  - pip install --use-mirrors coveralls coverage mock
+  - pip install --use-mirrors -r requirements.txt
 script:
-    - coverage run tests/runtests.py
+  - coverage run tests/runtests.py
 after_success:
-    - coveralls
+  - coveralls
