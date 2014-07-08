@@ -5,6 +5,7 @@
 *.egg-info
 *.pyc
 build/
+dist/
 __pycache__
 
 # PyCharm  

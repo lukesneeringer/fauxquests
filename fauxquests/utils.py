@@ -1,4 +1,4 @@
-from fauxquests.exceptions import UnregisteredURL
+from fauxquests.exceptions import UnregisteredRequest
 from fauxquests.messages import NOT_FOUND
 from requests.compat import quote
 from sdict import AlphaSortedDict
@@ -35,23 +35,23 @@ class Registry(dict):
         # Nope, no match. :(
         # Now, we need to raise an exception.
         # First, Get a list of the registered URLs in a nice format.
-        registered_urls = '\n    - '.join(
+        registered_requests = '\n    - '.join(
             [six.text_type(i) for i in six.iterkeys(self)],
         )
-        if not registered_urls:
-            registered_urls = '(None)'
+        if not registered_requests:
+            registered_requests = '(None)'
 
         # Raise an exception.
         # UnregisteredURL inherits from AssertionError rather than KeyError,
         # which should give more attractive failures in tests.
-        raise UnregisteredURL(NOT_FOUND.format(
-            registered_urls=registered_urls,
-            request_url=key,
+        raise UnregisteredRequest(NOT_FOUND.format(
+            registered_requests=registered_requests,
+            request=key,
         ))
 
 
 class URL(object):
-    """A class for holding a URL, with convenience methods
+    """A class for holding a URL and method, with convenience methods
     for poking at its query string separately from the main URI.
     """
     def __init__(self, url, method='GET', **kwargs):
@@ -91,7 +91,7 @@ class URL(object):
         return hash(str(self))
 
     def __str__(self):
-        """Return the full URL, as a string."""
+        """Return the full method and URL, as a string."""
 
         # Start with the basic URI.
         answer = '%s %s' % (self.method, self.uri)

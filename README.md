@@ -9,11 +9,12 @@ in your unit tests without hitting the outside world.
 
 Install fauxquests using pip: `pip install fauxquests`.
 
-fauxquests runs on Python 2.7 and Python 3.3. (It probably also works fine
-on Python 2.6, but it's not explicitly tested against it.)
+fauxquests is explicitly tested against Python 2.7, Python 3.3, and Python 3.4.
+It probably also works fine on Python 2.6, but it's not explicitly tested
+against it.
 
 If you're using fauxquests with Python 2.7, you'll also need to install
-`mock` using pip; if you're on Python 3.3, fauxquests will use the version
+`mock` using pip; if you're on Python 3, fauxquests will use the version
 in the standard library.
 
 #### Using fauxquests
@@ -47,7 +48,7 @@ faux_server = fauxquests.FauxServer()
 
 r = requests.get('http://www.google.com/')      # Downloads from google.com
 with faux_server as fs:
-    r = requests.get('http://www.google.com/')  # Exception: UnregisteredURL
+    r = requests.get('http://www.google.com/')  # Exception: UnregisteredRequest
 ```
 
 The registration of a URL and response only lasts for the duration of
@@ -69,7 +70,7 @@ with faux_server as fs:
 
 with faux_server as fs:
     requests.get('http://bar/').content   # My MORE awesome response.
-    requests.get('http://foo/').content   # Exception: UnregisteredURL
+    requests.get('http://foo/').content   # Exception: UnregisteredRequest
 ```
 
 #### Mocking JSON Responses
@@ -111,7 +112,7 @@ with faux_server as fs:
     r = requests.post('http://foo/')
     r.json()   # { 'spam': True }
 
-    r = requests.get('http://foo/')  # UnregisteredURL
+    r = requests.get('http://foo/')  # UnregisteredRequest
 ```
 
 #### Query Strings in URLs

@@ -1,5 +1,5 @@
-NOT_FOUND = """{request_url}
+NOT_FOUND = """{request}
 
-Registered URLs are:
-    - {registered_urls}
+Registered requests are:
+    - {registered_requests}
 """
